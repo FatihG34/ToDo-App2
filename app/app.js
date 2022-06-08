@@ -32,8 +32,7 @@ let list = document.querySelector('.todo-items');
 // }
 
 onclick = (e) => {
-
-    if (e.target.classList.contains('fa-plus')) {
+    if (e.target.classList.contains('add-btn') || e.target.classList.contains('fa-plus')) {
         if (input.value == '') {
             alert('Please enter a task');
         } else if (input.value.length > 30) {
@@ -48,7 +47,7 @@ onclick = (e) => {
             let item = 
             `<li class="list-group-item d-flex justify-content-between align-items-center border-start-0 border-top-0 border-end-0 border-bottom rounded-0 my-2">
                 <div class="d-flex align-items-center">
-                    <input class="checkbox form-check-input bg-danger text-white me-2" type="checkbox" value="" aria-label="..." />
+                    <input class="checkbox form-check-input text-white me-2" type="checkbox" value="" aria-label="..."/>
                     <p class="task m-0 p-0">${input.value}</p>
                 </div>
                 <a href="#!" data-mdb-toggle="tooltip" title="Remove item">
@@ -63,23 +62,24 @@ onclick = (e) => {
 
     if (e.target.classList.contains('fas')) {
         e.target.parentElement.parentElement.remove();
+        tasks.splice(tasks.indexOf(e.target.parentElement.parentElement.querySelector('.task').innerHTML), 1);
     }
 
     if (e.target.classList.contains('checkbox')) {
-        if (!e.target.checked) {
-            e.target.checked = false;
-            e.target.parentElement.parentElement.classList.toggle('drawn');
-        } else {
-            e.target.checked = true;
-            e.target.parentElement.parentElement.classList.toggle('drawn');
-        }
+
+        e.target.checked ? e.target.setAttribute('checked', '') : e.target.removeAttribute('checked');
+
+        e.target.checked ? e.target.parentElement.parentElement.classList.add('drawn') : e.target.parentElement.parentElement.classList.remove('drawn');
     }
 
     localStorage.setItem('local_tasks', list.innerHTML);
     result();
 };
-
-
+onkeydown = (e) => {
+    if (e.key == 'Enter') {
+        document.querySelector('.fa-plus').click();
+    }
+}
 let result = function() {
 
     let task_num = Array.from(document.querySelectorAll('li')).length;
